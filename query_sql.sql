@@ -5,37 +5,37 @@ select b.nodename as '网点名称', b.nodeno as '网点编码', a.cardno as '�
     when exists
     (
         select *
-        from mz_addvouch as a1
+        from addvouch as a1
         where a1.ctc = a.ctc and a1.tracode = a.tracode and a1.cardno = a.cardno and a1.wrongflag = '0'
         union
         select *
-        from mz_carddetail as c1
+        from carddetail as c1
         where c1.ctc = a.ctc and c1.tracode = a.tracode and c1.cardno = a.cardno and c1.wrongflag = '0'
     )
     then '写卡失败'
     when exists
     (
         select *
-        from mz_addvouch as a2
+        from addvouch as a2
         where a2.ctc = a.ctc + 1 and a2.tracode = a.tracode and a2.cardno = a.cardno and a2.wrongflag = '0'
         union
         select *
-        from mz_carddetail as c2
+        from carddetail as c2
         where c2.ctc = a.ctc + 1 and c2.tracode = a.tracode and c2.cardno = a.cardno and c2.wrongflag = '0'
     )
     then '写卡成功'
     when exists
     (
         select *
-        from mz_oildetail as a3
+        from oildetail as a3
         where a3.cardno = a.cardno and a3.opetime > a.opetime and a3.suctag in ('00', '01', '02')
         union
         select *
-        from mz_oilvouch as b3
+        from oilvouch as b3
         where b3.cardno = a.cardno and b3.opetime > a.opetime and b3.suctag in ('00', '01', '02')
         union
         select *
-        from mz_unlocal_credit_vouch as c3
+        from unlocal_credit_vouch as c3
         where c3.cardno = a.cardno and c3.opetime > a.opetime and c3.suctag in ('00', '01', '02')
     ) 
     then
@@ -43,18 +43,18 @@ select b.nodename as '网点名称', b.nodeno as '网点编码', a.cardno as '�
         when exists
         (
             select *
-            from mz_cardaccount as b4, 
+            from cardaccount as b4, 
             (
             	select * 
-        		from mz_oildetail as a4
+        		from oildetail as a4
         		where a4.cardno = a.cardno and a4.opetime > a.opetime and a4.suctag in ('00', '01', '02')
         		union
         		select *
-        		from mz_oilvouch as b4
+        		from oilvouch as b4
         		where b4.cardno = a.cardno and b4.opetime > a.opetime and b4.suctag in ('00', '01', '02')
         		union
         		select *
-        		from mz_unlocal_credit_vouch as c4
+        		from unlocal_credit_vouch as c4
         		where c4.cardno = a.cardno and c4.opetime > a.opetime and c4.suctag in ('00', '01', '02')
             ) AS a5
             where a5.cardno = b4.cardno and a5.balance = b4.balance and a5.ctc =
@@ -62,17 +62,17 @@ select b.nodename as '网点名称', b.nodeno as '网点编码', a.cardno as '�
                 select max(a7.ctc)
                 from             
                 (
-            	select * 
-        		from mz_oildetail as a6
-        		where a6.cardno = a.cardno and a6.opetime > a.opetime and a6.suctag in ('00', '01', '02')
-        		union
-        		select *
-        		from mz_oilvouch as b6
-        		where b6.cardno = a.cardno and b6.opetime > a.opetime and b6.suctag in ('00', '01', '02')
-        		union
-        		select *
-        		from mz_unlocal_credit_vouch as c6
-        		where c6.cardno = a.cardno and c6.opetime > a.opetime and c6.suctag in ('00', '01', '02')
+            	    select * 
+        		    from oildetail as a6
+        		    where a6.cardno = a.cardno and a6.opetime > a.opetime and a6.suctag in ('00', '01', '02')
+        		    union
+        		    select *
+        		    from oilvouch as b6
+        		    where b6.cardno = a.cardno and b6.opetime > a.opetime and b6.suctag in ('00', '01', '02')
+        		    union
+        		    select *
+        		    from unlocal_credit_vouch as c6
+        		    where c6.cardno = a.cardno and c6.opetime > a.opetime and c6.suctag in ('00', '01', '02')
             	) AS a7
             )
         )
@@ -80,18 +80,18 @@ select b.nodename as '网点名称', b.nodeno as '网点编码', a.cardno as '�
         when exists
         (
             select *
-            from mz_cardaccount as b5,
+            from cardaccount as b5,
             (
             	select * 
-        		from mz_oildetail as a8
+        		from oildetail as a8
         		where a8.cardno = a.cardno and a8.opetime > a.opetime and a8.suctag in ('00', '01', '02')
         		union
         		select *
-        		from mz_oilvouch as b8
+        		from oilvouch as b8
         		where b8.cardno = a.cardno and b8.opetime > a.opetime and b8.suctag in ('00', '01', '02')
         		union
         		select *
-        		from mz_unlocal_credit_vouch as c8
+        		from unlocal_credit_vouch as c8
         		where c8.cardno = a.cardno and c8.opetime > a.opetime and c8.suctag in ('00', '01', '02')
             ) as a9
             where a9.cardno = b5.cardno and b5.balance - a9.balance = a.amount and a9.ctc =
@@ -100,15 +100,15 @@ select b.nodename as '网点名称', b.nodeno as '网点编码', a.cardno as '�
                 from            
                 (
             		select * 
-        			from mz_oildetail as a11
+        			from oildetail as a11
         			where a11.cardno = a.cardno and a11.opetime > a.opetime and a11.suctag in ('00', '01', '02')
         			union
         			select *
-        			from mz_oilvouch as b11
+        			from oilvouch as b11
         			where b11.cardno = a.cardno and b11.opetime > a.opetime and b11.suctag in ('00', '01', '02')
         			union
         			select *
-        			from mz_unlocal_credit_vouch as c11
+        			from unlocal_credit_vouch as c11
         			where c11.cardno = a.cardno and c11.opetime > a.opetime and c11.suctag in ('00', '01', '02')
             	) AS a10
             )
