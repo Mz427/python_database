@@ -99,7 +99,7 @@ for i in addvouch_x :
                 from unlocal_credit_vouch as c3 \
                 where c3.cardno = '{i[2]}' and c3.opetime > '{i[4]}' and c3.suctag in ('00', '01', '02') \
             ) as d3 \
-            order by ctc" 
+            order by ctc desc" 
     query_cursor.execute(query_sql)
     temp_result = query_cursor.fetchone()
     if temp_result:
