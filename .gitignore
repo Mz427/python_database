@@ -1,7 +1,11 @@
 深圳运维工作记录*
 __pycache__
 .vs
+*.zip
+*.exe
 *.doc
 *.docx
 *.xlsx
+*.jpg
+*.txt
 template*

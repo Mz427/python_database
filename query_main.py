@@ -25,7 +25,7 @@ query_cursor = query_connect.cursor()
 
 query_sql = " \
     select b.nodename, b.nodeno, a.cardno, a.compno, a.opetime, a.amount, a.balance, a.tracode, \
-        a.ctc, a.ttc, a.terminalno, a.wrongflag \
+        a.ctc, a.ttc, a.terminalno, a.wrongflag, b.sinopec_nodeno \
     from addvouch as a, nodeinfor as b  \
     where a.nodeno = b.nodeno and a.wrongflag = 'X' and \
         convert(numeric(8, 0), convert(char(8), a.opetime,112)) = convert(numeric(8, 0), convert(char(8), dateadd(day, -2, getdate()), 112))"
