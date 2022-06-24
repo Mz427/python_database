@@ -15,10 +15,10 @@ sheet_fk = excel_fk.create_sheet(today_suffix[6:8], -2)
 cur_sheet_row = 1
 cur_sheet_column = 1
 
-#Connetc query01.
+#Connect query01.
 query_connect = sqlanydb.connect(dsn="query1")
 query_cursor = query_connect.cursor()
-#Connetc postgresql.
+#Connect postgresql.
 #postgresql_connect = psycopg2.connect(database="mzdb", user="mz", password="058474", \
 #    host="10.9.7.201" , port="5432")
 #postgresql_cursor = postgresql_connect.cursor()
@@ -28,7 +28,8 @@ query_sql = " \
         a.ctc, a.ttc, a.terminalno, a.wrongflag, b.sinopec_nodeno \
     from addvouch as a, nodeinfor as b  \
     where a.nodeno = b.nodeno and a.wrongflag = 'X' and \
-        convert(numeric(8, 0), convert(char(8), a.opetime,112)) = convert(numeric(8, 0), convert(char(8), dateadd(day, -2, getdate()), 112))"
+        convert(numeric(8, 0), convert(char(8), a.opetime,112)) = \
+        convert(numeric(8, 0), convert(char(8), dateadd(day, -2, getdate()), 112))"
 #postgresql_sql = " \
 #    select * \
 #    from mz_test.mz_addvouch as a\
@@ -63,13 +64,13 @@ for i in addvouch_x :
         continue
     #根据后续圈存流水判断是否确认。
     query_sql = f" \
-    select a1.ctc \
-    from addvouch as a1 \
-    where a1.ctc = {i[8]} + 1 and a1.tracode = '{i[7]}' and a1.cardno = '{i[2]}' and a1.wrongflag = '0' \
-    union \
-    select c1.ctc \
-    from carddetail as c1 \
-    where c1.ctc = {i[8]} + 1 and c1.tracode = '{i[7]}' and c1.cardno = '{i[2]}' and c1.wrongflag = '0'" 
+        select a1.ctc \
+        from addvouch as a1 \
+        where a1.ctc = {i[8]} + 1 and a1.tracode = '{i[7]}' and a1.cardno = '{i[2]}' and a1.wrongflag = '0' \
+        union \
+        select c1.ctc \
+        from carddetail as c1 \
+        where c1.ctc = {i[8]} + 1 and c1.tracode = '{i[7]}' and c1.cardno = '{i[2]}' and c1.wrongflag = '0'" 
     query_cursor.execute(query_sql)
     temp_result = query_cursor.fetchone()
     if temp_result:
@@ -84,22 +85,22 @@ for i in addvouch_x :
         continue
     #根据后续加油流水判断是否冲正确认。
     query_sql = f" \
-            select * \
-            from \
-            ( \
-                select a3.ctc, a3.balance \
-                from oildetail as a3 \
-                where a3.cardno = '{i[2]}' and a3.opetime > '{i[4]}' and a3.suctag in ('00', '01', '02') \
-                union \
-                select b3.ctc, b3.balance \
-                from oilvouch as b3 \
-                where b3.cardno = '{i[2]}' and b3.opetime > '{i[4]}' and b3.suctag in ('00', '01', '02') \
-                union \
-                select c3.ctc, c3.balance \
-                from unlocal_credit_vouch as c3 \
-                where c3.cardno = '{i[2]}' and c3.opetime > '{i[4]}' and c3.suctag in ('00', '01', '02') \
-            ) as d3 \
-            order by ctc desc" 
+        select * \
+        from \
+        ( \
+            select a3.ctc, a3.balance \
+            from oildetail as a3 \
+            where a3.cardno = '{i[2]}' and a3.opetime > '{i[4]}' and a3.suctag in ('00', '01', '02') \
+            union \
+            select b3.ctc, b3.balance \
+            from oilvouch as b3 \
+            where b3.cardno = '{i[2]}' and b3.opetime > '{i[4]}' and b3.suctag in ('00', '01', '02') \
+            union \
+            select c3.ctc, c3.balance \
+            from unlocal_credit_vouch as c3 \
+            where c3.cardno = '{i[2]}' and c3.opetime > '{i[4]}' and c3.suctag in ('00', '01', '02') \
+        ) as d3 \
+        order by ctc desc" 
     query_cursor.execute(query_sql)
     temp_result = query_cursor.fetchone()
     if temp_result:
