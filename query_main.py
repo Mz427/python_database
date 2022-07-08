@@ -121,7 +121,7 @@ for i in addvouch_x :
             cur_sheet_row += 1
             cur_sheet_column = 1
             continue
-        elif float(temp_result[1]) == float(temp_result_cardaccount[0][0]) - float(i[5]): 
+        elif float(temp_result[1]) == float(temp_result_cardaccount[0]) - float(i[5]): 
             #插入excel处理结果：写卡失败，待冲正。
             for j in i:
                 sheet_fk.cell(row=cur_sheet_row, column=cur_sheet_column).value = j
